@@ -1,0 +1,9 @@
+<button
+  type="button"
+  (click)="toggle()"
+  class="absolute right-3 text-secondary/50 hover:text-primary transition-colors"
+  [attr.aria-label]="visible() ? 'Hide password' : 'Show password'"
+  [attr.aria-pressed]="visible()"
+>
+  <app-icon [name]="visible() ? 'eye-off' : 'eye'" />
+</button>

@@ -1,0 +1,85 @@
+<div class="flex flex-col items-center justify-center px-6 py-12">
+  <div class="w-full max-w-md bg-white/50 backdrop-blur-sm p-8 md:p-10 rounded-xl border border-secondary/10 shadow-xl shadow-primary/5">
+
+    <header class="mb-8 text-center">
+      <h1 class="text-primary text-3xl font-bold tracking-tight">
+        Sign in
+      </h1>
+    </header>
+
+    <form
+      class="space-y-6"
+      [formGroup]="loginForm"
+      (ngSubmit)="onLogin()"
+    >
+
+      <div class="space-y-2">
+        <label class="text-primary text-sm font-semibold" for="username">
+          User Name
+        </label>
+
+        <input
+          id="username"
+          type="text"
+          formControlName="username"
+          placeholder="Enter your username"
+          class="form-input w-full h-12 px-4 rounded-lg border border-secondary/20 bg-white/80 text-primary placeholder:text-secondary/50 focus:outline-none transition-all duration-200"
+        />
+    
+        <p
+          *ngIf="loginForm.get('username')?.touched && loginForm.get('username')?.invalid"
+          class="text-red-500 text-xs mt-1"
+        >
+          Username is required
+        </p>
+      </div>
+
+      <div class="space-y-2">
+        <div class="flex justify-between items-center">
+          <label class="text-primary text-sm font-semibold" for="password">
+            Password
+          </label>
+          <a class="text-accent hover:text-primary text-xs font-medium transition-colors" href="#">
+            Forgot password?
+          </a>
+        </div>
+
+       <div class="relative flex items-center">
+          <input
+           #passwordInput
+            id="password"
+            [type]="passwordVisible() ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+            class="form-input w-full h-12 px-4 pr-12 rounded-lg border border-secondary/20 bg-white/80 text-primary placeholder:text-secondary/50 focus:outline-none transition-all duration-200"
+          />
+          <app-password-toggle
+            (visibilityChange)="onVisibilityChange($event)"
+          />
+        </div>
+
+        <div
+          *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"
+          class="text-red-500 text-xs mt-1 space-y-1"
+        >
+          <p *ngIf="loginForm.get('password')?.errors?.['required']">
+            Password is required
+          </p>
+          <p *ngIf="loginForm.get('password')?.errors?.['minlength']">
+            Password must be at least 10 characters
+          </p>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="loginForm.invalid"
+        class="w-full h-12 bg-amber-950 hover:bg-amber-950 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-lg shadow-lg shadow-amber-950/20 transition-all duration-200 transform active:scale-[0.98]"
+      >
+        Sign in
+      </button>
+
+    </form>
+  </div>
+</div>
