@@ -17,15 +17,4 @@ Route::middleware(['IsUserAuth'])->group(function () {
         Route::get('me', 'getuser');
         Route::get('users', 'index');
     });
-
-    Route::get('products', [ProductController::class, 'getProducts']);
-
-    Route::middleware(['IsAdmin'])->group(function () {
-        Route::controller(ProductController::class)->group(function () {
-            Route::post('products', 'addProduct');
-            Route::get('/products/{id}', 'getProductById');
-            Route::patch('/products/{id}', 'updateProductById');
-            Route::delete('/products/{id}', 'deleteProductById');
-        });
-    });
 });
