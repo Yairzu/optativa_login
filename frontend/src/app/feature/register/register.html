@@ -1,0 +1,140 @@
+<div class="flex flex-col items-center justify-center px-6 py-12">
+  <div
+    class="w-full max-w-md bg-white/50 backdrop-blur-sm p-8 md:p-10 rounded-xl border border-secondary/10 shadow-xl shadow-primary/5"
+  >
+    <header class="mb-8 text-center">
+      <h1 class="text-primary text-3xl font-bold tracking-tight">Create account</h1>
+      <p class="text-secondary text-sm mt-2">Register to access your account</p>
+    </header>
+
+    <form class="space-y-6" [formGroup]="registerForm" (ngSubmit)="onRegister()">
+      <div class="space-y-2">
+        <label class="text-primary text-sm font-semibold" for="name_user"> First Name </label>
+
+        <input
+          id="name_user"
+          type="text"
+          formControlName="name_user"
+          placeholder="Enter your first name"
+          class="form-input w-full h-12 px-4 rounded-lg border border-secondary/20 bg-white/80 text-primary placeholder:text-secondary/50 focus:outline-none transition-all duration-200"
+        />
+
+        <p
+          *ngIf="registerForm.get('name_user')?.touched && registerForm.get('name_user')?.invalid"
+          class="text-red-500 text-xs mt-1"
+        >
+          First name is required
+        </p>
+      </div>
+
+      <div class="space-y-2">
+        <label class="text-primary text-sm font-semibold" for="surname_user"> Last Name </label>
+
+        <input
+          id="surname_user"
+          type="text"
+          formControlName="surname_user"
+          placeholder="Enter your last name"
+          class="form-input w-full h-12 px-4 rounded-lg border border-secondary/20 bg-white/80 text-primary placeholder:text-secondary/50 focus:outline-none transition-all duration-200"
+        />
+
+        <p
+          *ngIf="
+            registerForm.get('surname_user')?.touched && registerForm.get('surname_user')?.invalid
+          "
+          class="text-red-500 text-xs mt-1"
+        >
+          Last name is required
+        </p>
+      </div>
+
+      <div class="space-y-2">
+        <label class="text-primary text-sm font-semibold" for="nick_user"> Username </label>
+
+        <input
+          id="nick_user"
+          type="text"
+          formControlName="nick_user"
+          placeholder="Choose a username"
+          class="form-input w-full h-12 px-4 rounded-lg border border-secondary/20 bg-white/80 text-primary placeholder:text-secondary/50 focus:outline-none transition-all duration-200"
+        />
+
+        <p
+          *ngIf="registerForm.get('nick_user')?.touched && registerForm.get('nick_user')?.invalid"
+          class="text-red-500 text-xs mt-1"
+        >
+          Username is required
+        </p>
+      </div>
+
+      <div class="space-y-2">
+        <label class="text-primary text-sm font-semibold" for="password_user"> Password </label>
+
+        <div class="relative flex items-center">
+          <input
+            #passwordInput
+            id="password_user"
+            [type]="passwordVisible() ? 'text' : 'password'"
+            formControlName="password_user"
+            placeholder="••••••••"
+            autocomplete="new-password"
+            class="form-input w-full h-12 px-4 pr-12 rounded-lg border border-secondary/20 bg-white/80 text-primary placeholder:text-secondary/50 focus:outline-none transition-all duration-200"
+          />
+          <app-password-toggle (visibilityChange)="onVisibilityChange($event)" />
+        </div>
+
+        <div
+          *ngIf="
+            registerForm.get('password_user')?.touched && registerForm.get('password_user')?.invalid
+          "
+          class="text-red-500 text-xs mt-1 space-y-1"
+        >
+          <p *ngIf="registerForm.get('password_user')?.errors?.['required']">
+            Password is required
+          </p>
+          <p *ngIf="registerForm.get('password_user')?.errors?.['minlength']">
+            Password must be at least 10 characters
+          </p>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <label class="text-primary text-sm font-semibold" for="password_user_confirmation">
+          Confirm Password
+        </label>
+
+        <input
+          #passwordInput
+          id="password_user_confirmation"
+          [type]="passwordVisible() ? 'text' : 'password'"
+          formControlName="password_user_confirmation"
+          placeholder="••••••••"
+          autocomplete="new-password"
+          class="form-input w-full h-12 px-4 rounded-lg border border-secondary/20 bg-white/80 text-primary placeholder:text-secondary/50 focus:outline-none transition-all duration-200"
+        />
+
+        <div
+          *ngIf="
+            registerForm.get('password_user_confirmation')?.touched &&
+            registerForm.get('password_user_confirmation')?.invalid
+          "
+          class="text-red-500 text-xs mt-1 space-y-1"
+        >
+          <p *ngIf="registerForm.get('password_user_confirmation')?.errors?.['required']">
+            Confirm password is required
+          </p>
+          <p *ngIf="registerForm.errors?.['passwordMismatch']">Passwords do not match</p>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        (click)="onRegister()"
+        [disabled]="registerForm.invalid"
+        class="w-full h-12 bg-amber-950 hover:bg-amber-950 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-lg shadow-lg shadow-amber-950/20 transition-all duration-200 transform active:scale-[0.98]"
+      >
+        Create account
+      </button>
+    </form>
+  </div>
+</div>
