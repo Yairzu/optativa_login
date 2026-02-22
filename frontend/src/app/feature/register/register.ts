@@ -5,42 +5,98 @@ import {
   FormGroup,
   Validators,
   FormBuilder,
+  AbstractControl,
+  ValidationErrors,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { PasswordToggleComponent } from '../../components/ui/toggle.component';
 import { Router } from '@angular/router';
 import { AccessService } from '../../services/access.service';
+import { register } from '../../interface/register';
 
 @Component({
-  selector: 'app-register',
+  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, PasswordToggleComponent],
   templateUrl: './register.html',
 })
 export class Register {
+
   private accessService = inject(AccessService);
   private router = inject(Router);
-  public FormBuilder = inject(FormBuilder);
+  private fb = inject(FormBuilder);
 
   passwordVisible = signal(false);
+  confirmPasswordVisible = signal(false);
 
-  public registerForm: FormGroup = this.FormBuilder.group({
-    username: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required],
-    }),
-    password: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.minLength(10)],
-    }),
-  });
+  public registerForm: FormGroup = this.fb.group(
+    {
+      name_user: ['', Validators.required],
+      surname_user: ['', Validators.required],
+      nick_user: ['', Validators.required],
+      password_user: ['', [Validators.required, Validators.minLength(10)]],
+      password_user_confirmation: ['', Validators.required],
+    },
+    { validators: this.passwordMatchValidator }
+  );
+
+  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.get('password_user')?.value;
+    const confirm = control.get('password_user_confirmation')?.value;
+    return password === confirm ? null : { passwordMismatch: true };
+  }
 
   onVisibilityChange(value: boolean) {
     this.passwordVisible.set(value);
   }
 
+  onConfirmVisibilityChange(value: boolean) {
+    this.confirmPasswordVisible.set(value);
+  }
+
+  navigateToLogin() {
+    this.router.navigate(['/login']);
+  }
+
   onRegister() {
-    if (this.registerForm.valid) {
-      console.log(this.registerForm.getRawValue());
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      return;
     }
+
+    const formValue = this.registerForm.getRawValue();
+
+    const object: register = {
+      name_user: formValue.name_user,
+      surname_user: formValue.surname_user,
+      nick_user: formValue.nick_user,
+      password_user: formValue.password_user,
+      password_user_confirmation: formValue.password_user_confirmation,
+    };
+
+    this.accessService.register(object).subscribe({
+      next: (data) => {
+        if (!data?.message) {
+          alert('Unexpected server response.');
+          return;
+        }
+
+        alert('User create successfully.');
+
+        this.router.navigate(['/login'])
+      },
+
+      error: (err) => {
+        switch (err.status) {
+          case 422:
+            alert('Validation error. Please check your data.');
+            break;
+          case 500:
+            alert('Server error. Please try again later.');
+            break;
+          default:
+            alert('Registration failed.');
+        }
+      }
+    });
   }
 }

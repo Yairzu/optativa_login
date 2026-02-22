@@ -18,13 +18,14 @@ import { login } from '../../interface/login';
   templateUrl: './login.component.html',
 })
 export class LoginComponent {
+
   private accessService = inject(AccessService);
   private router = inject(Router);
-  public FormBuilder = inject(FormBuilder);
+  private fb = inject(FormBuilder);
 
   passwordVisible = signal(false);
 
-  public loginForm: FormGroup = this.FormBuilder.group({
+  public loginForm: FormGroup = this.fb.group({
     username: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required],
@@ -39,41 +40,64 @@ export class LoginComponent {
     this.passwordVisible.set(value);
   }
 
+  navigateToRegister() {
+    this.router.navigate(['/register']);
+  }
+
   onLogin() {
-    if (this.loginForm.valid) {
-      console.log(this.loginForm.getRawValue());
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
 
-      const object: login = {
-        nick_user: this.loginForm.value.username,
-        password_user: this.loginForm.value.password,
-      };
-      this.accessService.login(object).subscribe({
-        next: (date) => {
-          console.log(date);
-          if (date.access_token) {
-            localStorage.setItem('token', date.access_token);
-            localStorage.setItem('user', JSON.stringify(date.user));
+    const formValue = this.loginForm.getRawValue();
 
-            const role = date.user.id_rol;
+    const object: login = {
+      nick_user: formValue.username,
+      password_user: formValue.password,
+    };
 
-            if (role === 1) {
-              this.router.navigate(['/admin/home.admin']);
-            }
-            else if (role === 2) {
-              this.router.navigate(['/user/home.user']);
-            }
-            else{
-              this.router.navigate(['/login']);
-            }
-          } else {
-            alert('Credenciales incorrectas, por favor intente nuevamente.');
-          }
-        },
-        error: (err) => {
-          console.error(err.message);
-          alert('Ocurrió un error durante el inicio de sesión. Por favor, inténtelo de nuevo más tarde.');
+    this.accessService.login(object).subscribe({
+      next: (data) => {
+        
+        if (!data?.access_token || !data?.user) {
+          alert('Invalid server response.');
+          return;
         }
-      });
+
+        localStorage.setItem('token', data.access_token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+
+        this.redirectByRole(data.user.id_rol);
+      },
+
+      error: (err) => {
+        switch (err.status) {
+          case 401:
+            alert('Invalid credentials.');
+            break;
+          case 500:
+            alert('Server error. Please try again later.');
+            break;
+          default:
+            alert('Unexpected error occurred.');
+        }
+      }
+    });
+  }
+
+  private redirectByRole(role: number) {
+    switch (role) {
+      case 1:
+        this.router.navigate(['/admin/home.admin']);
+        alert('Welcome, admin!');
+        break;
+      case 2:
+        this.router.navigate(['/user/home.user']);
+        alert('Welcome, user!');
+        break;
+      default:
+        this.router.navigate(['/login']);
     }
   }
 }
