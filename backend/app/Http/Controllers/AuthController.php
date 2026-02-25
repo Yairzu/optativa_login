@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash; 
-use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Models\User;
@@ -17,6 +17,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'name_user' => 'required|string|max:30',
             'surname_user' => 'required|string|max:30',
+            'email_user' => 'required|string|email|max:50|unique:user,email_user',
             'nick_user' => 'required|string|max:30|unique:user,nick_user',
             'password_user' => 'required|string|min:10|confirmed',
         ]);
@@ -28,6 +29,7 @@ class AuthController extends Controller
         User::create([
             'name_user' => $request->name_user,
             'surname_user' => $request->surname_user,
+            'email_user' => $request->email_user,
             'nick_user' => $request->nick_user,
             'password_user' => Hash::make($request->password_user),
             'id_rol' => 2,
@@ -35,11 +37,11 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'User created successfully'], 201);
     }
-    
+
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nick_user' => 'required|string|max:30',
+            'email_user' => 'required|string|email|max:50',
             'password_user' => 'required|string|min:10',
         ]);
 
@@ -48,8 +50,8 @@ class AuthController extends Controller
         }
 
         $credentials = [
-            'nick_user' => $request->nick_user,
-            'password'  => $request->password_user, 
+            'email_user' => $request->email_user,
+            'password'  => $request->password_user,
         ];
 
         try {
@@ -62,12 +64,14 @@ class AuthController extends Controller
         }
     }
 
-    public function getuser(){
+    public function getuser()
+    {
         return response()->json(Auth::user(), 200);
     }
 
-    public function index(){
-        $users = User::all(); 
+    public function index()
+    {
+        $users = User::all();
         return response()->json($users, 200);
     }
 
@@ -79,12 +83,12 @@ class AuthController extends Controller
     }
 
     protected function createNewToken($token)
-{
-    return response()->json([
-        'access_token' => $token,
-        'token_type' => 'bearer',
-        'expires_in' => JWTAuth::factory()->getTTL() * 60,
-        'user' => JWTAuth::user()
-    ]);
-}
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => JWTAuth::factory()->getTTL() * 60,
+            'user' => JWTAuth::user()
+        ]);
+    }
 }

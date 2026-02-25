@@ -33,6 +33,7 @@ export class Register {
       name_user: ['', Validators.required],
       surname_user: ['', Validators.required],
       nick_user: ['', Validators.required],
+      email_user: ['', [Validators.required, Validators.email]],
       password_user: ['', [Validators.required, Validators.minLength(10)]],
       password_user_confirmation: ['', Validators.required],
     },
@@ -69,6 +70,7 @@ export class Register {
       name_user: formValue.name_user,
       surname_user: formValue.surname_user,
       nick_user: formValue.nick_user,
+      email_user: formValue.email_user,
       password_user: formValue.password_user,
       password_user_confirmation: formValue.password_user_confirmation,
     };
@@ -88,7 +90,7 @@ export class Register {
       error: (err) => {
         switch (err.status) {
           case 422:
-            alert('Validation error. Please check your data.');
+            alert('Email or nickname already in use.');
             break;
           case 500:
             alert('Server error. Please try again later.');

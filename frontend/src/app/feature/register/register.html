@@ -31,6 +31,17 @@
           Last name is required
         </p>
       </div>
+      <div class="space-y-2">
+        <label class="text-primary text-sm font-semibold" for="email_user"> Email </label>
+
+        <input id="email_user" type="text" formControlName="email_user" placeholder="Enter your email"
+          class="form-input w-full h-12 px-4 rounded-lg border border-secondary/20 bg-white/80 text-primary placeholder:text-secondary/50 focus:outline-none transition-all duration-200" />
+        <div *ngIf="registerForm.get('email_user')?.touched && registerForm.get('email_user')?.invalid"
+          class="text-red-500 text-xs mt-1 space-y-1">
+          <p *ngIf="registerForm.get('email_user')?.errors?.['required']">Email is required</p>
+          <p *ngIf="registerForm.get('email_user')?.errors?.['email']">Please enter a valid email address</p>
+        </div>
+      </div>
 
       <div class="space-y-2">
         <label class="text-primary text-sm font-semibold" for="nick_user"> Username </label>

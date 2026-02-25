@@ -12,6 +12,7 @@ return new class extends Migration
             $table->bigIncrements('id_user');
             $table->unsignedBigInteger('id_rol');
             $table->string('name_user', 30);
+            $table ->string('email_user', 50)->unique();
             $table->string('surname_user', 30);
             $table->string('nick_user', 30)->unique();
             $table->string('password_user', 255)->notNull(); 

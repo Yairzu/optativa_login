@@ -25,16 +25,10 @@ export class LoginComponent {
 
   passwordVisible = signal(false);
 
-  public loginForm: FormGroup = this.fb.group({
-    username: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required],
-    }),
-    password: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.minLength(10)],
-    }),
-  });
+  public loginForm = this.fb.nonNullable.group({
+  email_user: ['', [Validators.required, Validators.email]],
+  password: ['', [Validators.required, Validators.minLength(10)]],
+});
 
   onVisibilityChange(value: boolean) {
     this.passwordVisible.set(value);
@@ -53,7 +47,7 @@ export class LoginComponent {
     const formValue = this.loginForm.getRawValue();
 
     const object: login = {
-      nick_user: formValue.username,
+      email_user: formValue.email_user,
       password_user: formValue.password,
     };
 
@@ -65,8 +59,9 @@ export class LoginComponent {
           return;
         }
 
-        localStorage.setItem('token', data.access_token);
+        localStorage.setItem('access_token', data.access_token);
         localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('email_user', data.user.email_user);
 
         this.redirectByRole(data.user.id_rol);
       },
