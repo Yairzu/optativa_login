@@ -1,29 +1,45 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './feature/Login/login.component';
-import { HomeAdmin } from './feature/admin/home.admin/home.admin';
-import { HomeUsers } from './feature/users/home.users/home.users';
-import { Register } from './feature/register/register';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full',
+    path: 'admin',
+    loadComponent: () =>
+      import('./feature/admin/home.admin/home.admin')
+        .then(m => m.HomeAdmin),
+    canActivate: [AuthGuard],
+    data: { showNavbar: true }
+  },
+  {
+    path: 'users',
+    loadComponent: () =>
+      import('./feature/users/home.users/home.users')
+        .then(m => m.HomeUsers),
+    canActivate: [AuthGuard],
+    data: { showNavbar: true }
   },
   {
     path: 'login',
-    component: LoginComponent,
+    loadComponent: () =>
+      import('./feature/login/login.component')
+        .then(m => m.LoginComponent),
+    data: { showNavbar: false }
   },
   {
     path: 'register',
-    component: Register,
+    loadComponent: () =>
+      import('./feature/register/register')
+        .then(m => m.Register),
+    data: { showNavbar: false }
   },
   {
-    path: 'admin/home.admin',
-    component: HomeAdmin,
+    path: '',
+    redirectTo: '/login',
+    pathMatch: 'full' 
   },
   {
-    path: 'user/home.user',
-    component: HomeUsers,
-  },
+    path: '**',
+    redirectTo: '/login'
+  }
+  
 ];

@@ -11,6 +11,7 @@ import { PasswordToggleComponent } from '../../components/ui/toggle.component';
 import { AccessService } from '../../services/access.service';
 import { Router } from '@angular/router';
 import { login } from '../../interface/login';
+import { AuthService } from '../../services/auth.service'; 
 
 @Component({
   standalone: true,
@@ -22,6 +23,7 @@ export class LoginComponent {
   private accessService = inject(AccessService);
   private router = inject(Router);
   private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
 
   passwordVisible = signal(false);
 
@@ -65,8 +67,8 @@ export class LoginComponent {
           return;
         }
 
-        localStorage.setItem('token', data.access_token);
-        localStorage.setItem('user', JSON.stringify(data.user));
+        // Usar AuthService para actualizar el estado global
+        this.authService.setAuthState(data.access_token, data.user);
 
         this.redirectByRole(data.user.id_rol);
       },
@@ -89,11 +91,11 @@ export class LoginComponent {
   private redirectByRole(role: number) {
     switch (role) {
       case 1:
-        this.router.navigate(['/admin/home.admin']);
+        this.router.navigate(['/admin']);
         alert('Welcome, admin!');
         break;
       case 2:
-        this.router.navigate(['/user/home.user']);
+        this.router.navigate(['/users']);
         alert('Welcome, user!');
         break;
       default:

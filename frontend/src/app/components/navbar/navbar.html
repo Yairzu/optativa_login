@@ -1,0 +1,67 @@
+<nav class="relative bg-gradient-to-r from-amber-950 via-stone-900 to-amber-950 shadow-lg">
+
+  <div class="mx-auto max-w-7xl px-6">
+    <div class="flex h-16 items-center justify-between">
+
+      <div class="flex items-center space-x-3">
+        <img
+          src="/assets/images/logo.png"
+          class="h-8 w-auto" />
+      </div>
+
+      <div class="flex items-center space-x-6">
+
+        <ng-container *ngIf="user$ | async as user">
+
+          <div class="hidden sm:flex flex-col text-right leading-tight">
+            <span class="text-white text-sm font-semibold">
+              {{ getDisplayName(user) }}
+            </span>
+
+            <span class="text-amber-300 text-xs uppercase tracking-widest">
+              {{ getRoleLabel(user.id_rol) }}
+            </span>
+          </div>
+
+          <div class="relative">
+            <button
+              (click)="toggleProfile()"
+              class="flex items-center justify-center size-9 rounded-full
+                     bg-white text-amber-950 font-bold shadow-md
+                     transition-all duration-200 hover:scale-105">
+
+              {{ getInitial(user) }}
+            </button>
+
+            <div
+              *ngIf="profileOpen()"
+              class="absolute right-0 mt-3 w-56 rounded-xl bg-white
+                     shadow-2xl border border-stone-200
+                     overflow-hidden transition-all duration-150">
+
+              <div class="px-4 py-3 bg-stone-50 border-b border-stone-200">
+                <p class="text-stone-900 text-sm font-semibold">
+                  {{ getDisplayName(user) }}
+                </p>
+                <p class="text-amber-950 text-xs uppercase tracking-widest">
+                  {{ getRoleLabel(user.id_rol) }}
+                </p>
+              </div>
+
+              <button
+                (click)="onLogout()"
+                class="w-full text-left px-4 py-3 text-sm font-medium
+                       text-stone-700 hover:bg-red-50 hover:text-red-600
+                       transition-colors">
+                Logout
+              </button>
+
+            </div>
+          </div>
+
+        </ng-container>
+
+      </div>
+    </div>
+  </div>
+</nav>

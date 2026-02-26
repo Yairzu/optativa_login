@@ -27,15 +27,15 @@ class DatabaseSeeder extends Seeder
                 'id_rol'         => $adminId,
                 'name_user'      => 'Super',
                 'surname_user'   => 'Admin',
-                'nick_user'      => 'superadmin',
+                'nick_user'      => 'Admin',
                 'password_user'  => Hash::make('Admin@1234'),
             ],
             [
                 'id_rol'         => $usuarioId,
-                'name_user'      => 'Juan',
+                'name_user'      => 'Pepito',
                 'surname_user'   => 'Pérez',
-                'nick_user'      => 'juanperez',
-                'password_user'  => Hash::make('User@1234'),
+                'nick_user'      => 'Pepitoperez',
+                'password_user'  => Hash::make('Pepito@1234'),
             ],
         ]);
     }
