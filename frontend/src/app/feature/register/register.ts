@@ -34,7 +34,7 @@ export class Register {
       surname_user: ['', Validators.required],
       nick_user: ['', Validators.required],
       email_user: ['', [Validators.required, Validators.email]],
-      password_user: ['', [Validators.required, Validators.minLength(10)]],
+      password_user: ['', [Validators.required, Validators.minLength(3)]],
       password_user_confirmation: ['', Validators.required],
     },
     { validators: this.passwordMatchValidator }

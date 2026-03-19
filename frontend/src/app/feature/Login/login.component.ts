@@ -25,10 +25,16 @@ export class LoginComponent {
 
   passwordVisible = signal(false);
 
-  public loginForm = this.fb.nonNullable.group({
-  email_user: ['', [Validators.required, Validators.email]],
-  password: ['', [Validators.required, Validators.minLength(10)]],
-});
+  public loginForm: FormGroup = this.fb.group({
+    username: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    password: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(3)],
+    }),
+  });
 
   onVisibilityChange(value: boolean) {
     this.passwordVisible.set(value);
@@ -47,21 +53,20 @@ export class LoginComponent {
     const formValue = this.loginForm.getRawValue();
 
     const object: login = {
-      email_user: formValue.email_user,
+      nick_user: formValue.username,
       password_user: formValue.password,
     };
 
     this.accessService.login(object).subscribe({
       next: (data) => {
-        
+
         if (!data?.access_token || !data?.user) {
           alert('Invalid server response.');
           return;
         }
 
-        localStorage.setItem('access_token', data.access_token);
+        localStorage.setItem('token', data.access_token);
         localStorage.setItem('user', JSON.stringify(data.user));
-        localStorage.setItem('email_user', data.user.email_user);
 
         this.redirectByRole(data.user.id_rol);
       },

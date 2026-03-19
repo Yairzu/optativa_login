@@ -26,18 +26,18 @@ class DatabaseSeeder extends Seeder
             [
                 'id_rol'         => $adminId,
                 'name_user'      => 'Super',
-                'surname_user'   => 'Admin',
-                'email_user'     => 'superadmin@example.com',
-                'nick_user'      => 'superadmin',
-                'password_user'  => Hash::make('Admin@1234'),
+                'surname_user'   => 'admin',
+                'email_user'     => 'admin@ejemplo.com',
+                'nick_user'      => 'admin',
+                'password_user'  => Hash::make('admin@1234'),
             ],
             [
                 'id_rol'         => $usuarioId,
-                'name_user'      => 'Juan',
+                'name_user'      => 'pepito',
                 'surname_user'   => 'Pérez',
-                'email_user'     => 'juanperez@example.com',
-                'nick_user'      => 'juanperez',
-                'password_user'  => Hash::make('User@1234'),
+                'email_user'     => 'pepito@ejemplo.com',
+                'nick_user'      => 'pepito',
+                'password_user'  => Hash::make('pepito@abcd'),
             ],
         ]);
     }

@@ -19,7 +19,7 @@ class AuthController extends Controller
             'surname_user' => 'required|string|max:30',
             'email_user' => 'required|string|email|max:50|unique:user,email_user',
             'nick_user' => 'required|string|max:30|unique:user,nick_user',
-            'password_user' => 'required|string|min:10|confirmed',
+            'password_user' => 'required|string|min:3|confirmed',
         ]);
 
         if ($validator->fails()) {
@@ -41,8 +41,8 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email_user' => 'required|string|email|max:50',
-            'password_user' => 'required|string|min:10',
+            'nick_user' => 'required|string|max:30',
+            'password_user' => 'required|string|min:3',
         ]);
 
         if ($validator->fails()) {
@@ -50,7 +50,7 @@ class AuthController extends Controller
         }
 
         $credentials = [
-            'email_user' => $request->email_user,
+            'nick_user' => $request->nick_user,
             'password'  => $request->password_user,
         ];
 
