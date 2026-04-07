@@ -15,7 +15,7 @@
 
         <p *ngIf="registerForm.get('name_user')?.touched && registerForm.get('name_user')?.invalid"
           class="text-red-500 text-xs mt-1">
-          First name is required
+          First name es requerido
         </p>
       </div>
 
@@ -28,7 +28,7 @@
         <p *ngIf="
             registerForm.get('surname_user')?.touched && registerForm.get('surname_user')?.invalid
           " class="text-red-500 text-xs mt-1">
-          Last name is required
+          Last name es requerido
         </p>
       </div>
       <div class="space-y-2">
@@ -39,7 +39,7 @@
         <div *ngIf="registerForm.get('email_user')?.touched && registerForm.get('email_user')?.invalid"
           class="text-red-500 text-xs mt-1 space-y-1">
           <p *ngIf="registerForm.get('email_user')?.errors?.['required']">Email is required</p>
-          <p *ngIf="registerForm.get('email_user')?.errors?.['email']">Please enter a valid email address</p>
+          <p *ngIf="registerForm.get('email_user')?.errors?.['email']">Error formato correo</p>
         </div>
       </div>
 
@@ -51,7 +51,7 @@
 
         <p *ngIf="registerForm.get('nick_user')?.touched && registerForm.get('nick_user')?.invalid"
           class="text-red-500 text-xs mt-1">
-          Username is required
+          Error campo Vacio
         </p>
       </div>
 
@@ -68,9 +68,15 @@
         <div *ngIf="
             registerForm.get('password_user')?.touched && registerForm.get('password_user')?.invalid
           " class="text-red-500 text-xs mt-1 space-y-1">
+
           <p *ngIf="registerForm.get('password_user')?.errors?.['required']">
-            Password is required
+            Error campo Vacio
           </p>
+
+          <p *ngIf="registerForm.get('password_user')?.errors?.['minlength']">
+            Error contraseña corta
+          </p>
+
         </div>
       </div>
 
@@ -88,11 +94,11 @@
         <div *ngIf="registerForm.get('password_user_confirmation')?.touched"
           class="text-red-500 text-xs mt-1 space-y-1">
           <p *ngIf="registerForm.get('password_user_confirmation')?.errors?.['required']">
-            Confirm password is required
+            Error campo Vacio
           </p>
 
           <p *ngIf="registerForm.errors?.['passwordMismatch']">
-            Passwords do not match
+            Contraseña no coincide
           </p>
         </div>
       </div>

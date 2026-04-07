@@ -82,7 +82,7 @@ export class Register {
           return;
         }
 
-        alert('User create successfully.');
+        alert('Registro Exitoso.');
 
         this.router.navigate(['/login'])
       },
@@ -90,7 +90,7 @@ export class Register {
       error: (err) => {
         switch (err.status) {
           case 422:
-            alert('Email or nickname already in use.');
+            alert('Email or nickname en uso.');
             break;
           case 500:
             alert('Server error. Please try again later.');
