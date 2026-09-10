@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash; 
 use Illuminate\Support\Facades\Auth; 
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -25,12 +25,20 @@ class AuthController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
+        $role = DB::table('rol')->where('tipo_rol', 'usuario')->first();
+
+        if (! $role) {
+            $roleId = DB::table('rol')->insertGetId(['tipo_rol' => 'usuario']);
+        } else {
+            $roleId = $role->id_rol;
+        }
+
         User::create([
             'name_user' => $request->name_user,
             'surname_user' => $request->surname_user,
             'nick_user' => $request->nick_user,
-            'password_user' => Hash::make($request->password_user),
-            'id_rol' => 2,
+            'password_user' => $request->password_user,
+            'id_rol' => $roleId,
         ]);
 
         return response()->json(['message' => 'User created successfully'], 201);

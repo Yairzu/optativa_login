@@ -17,10 +17,10 @@ class IsUserAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(auth('api')->user()) {
+        if (auth('api')->check()) {
             return $next($request);
-        } else {
-            return response()->json(['error' => 'Unauthorized'], 401);
         }
+
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
 }

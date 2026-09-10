@@ -28,7 +28,7 @@ export class LoginComponent {
   public loginForm: FormGroup = this.fb.group({
     username: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required],
+      validators: [Validators.required, Validators.maxLength(30)],
     }),
     password: new FormControl('', {
       nonNullable: true,
